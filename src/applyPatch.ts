@@ -3,9 +3,9 @@ import { readFileSync, writeFileSync } from 'node:fs'
 import { join } from 'node:path'
 import { applyPatch } from 'diff'
 
-function run(command: string, options: { cwd?: string } = {}): string {
+function run(command: string): string {
   console.log(`> ${command}`)
-  return execSync(command, { encoding: 'utf8', stdio: 'pipe', ...options })
+  return execSync(command, { encoding: 'utf8', stdio: 'pipe' })
 }
 
 export default async function applyPatch_(packageName: string, patchMap: Record<string, string>) {
