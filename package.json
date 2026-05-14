@@ -3,6 +3,12 @@
   "version": "0.0.1",
   "description": "Dependencies patcher ~ apply patches to dependencies",
   "type": "module",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.mts",
+  "exports": {
+    "import": "./dist/index.mjs",
+    "types": "./dist/index.d.mts"
+  },
   "keywords": [
     "dependency",
     "dependencies",
