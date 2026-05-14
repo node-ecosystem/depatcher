@@ -14,13 +14,18 @@ const PACKAGE_MANAGER_MAP = {
   }
 }
 
+function detectPackageManager() {
+  const userAgent = process.env.npm_config_user_agent!
+  return userAgent.match(/^[^/]+/)![0]
+}
+
 function run(command: string): string {
   console.log(`> ${command}`)
   return execSync(command, { encoding: 'utf8', stdio: 'pipe' })
 }
 
 export default async function applyPatch_(packageName: string, patchMap: Record<string, string>) {
-  const packageManager = process.argv.at(0) as keyof typeof PACKAGE_MANAGER_MAP
+  const packageManager = detectPackageManager() as keyof typeof PACKAGE_MANAGER_MAP
 
   console.log(`🔄 Start patching "${packageName}"`)
   const patchOutput = run(`${PACKAGE_MANAGER_MAP[packageManager].patch} ${packageName}`)
