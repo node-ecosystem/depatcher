@@ -3,14 +3,27 @@ import { readFileSync, writeFileSync } from 'node:fs'
 import { join } from 'node:path'
 import { applyPatch } from 'diff'
 
+const PACKAGE_MANAGER_MAP = {
+  yarn: {
+    patch: 'yarn patch',
+    patchCommit: 'yarn patch-commit -s'
+  },
+  pnpm: {
+    patch: 'pnpm patch',
+    patchCommit: 'pnpm patch-commit'
+  }
+}
+
 function run(command: string): string {
   console.log(`> ${command}`)
   return execSync(command, { encoding: 'utf8', stdio: 'pipe' })
 }
 
 export default async function applyPatch_(packageName: string, patchMap: Record<string, string>) {
+  const packageManager = process.env.args!.at(0)! as keyof typeof PACKAGE_MANAGER_MAP
+
   console.log(`🔄 Start patching "${packageName}"`)
-  const patchOutput = run(`yarn patch ${packageName}`)
+  const patchOutput = run(`${PACKAGE_MANAGER_MAP[packageManager].patch} ${packageName}`)
 
   const tempDir = patchOutput.split('\n')[1].slice(49)
 
@@ -28,7 +41,7 @@ export default async function applyPatch_(packageName: string, patchMap: Record<
     console.log(`💾 Patched ${fileToPatch} with ${patchPath}`)
   }
 
-  run(`yarn patch-commit -s ${tempDir}`)
+  run(`${PACKAGE_MANAGER_MAP[packageManager].patchCommit} "${tempDir}"`)
 
   console.log(`📦 "${packageName}" patched`)
 }

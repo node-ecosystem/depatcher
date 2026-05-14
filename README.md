@@ -46,7 +46,6 @@ createPatch(
 ## 🔄 TODO
 
 - `npm` patch support
-- `pnpm` patch support
 
 ## 🛠️ Contributing
 
