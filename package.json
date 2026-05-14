@@ -1,6 +1,6 @@
 {
   "name": "depatcher",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Dependencies patcher ~ apply patches to dependencies",
   "type": "module",
   "module": "./dist/index.mjs",
