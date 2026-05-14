@@ -20,7 +20,7 @@ function run(command: string): string {
 }
 
 export default async function applyPatch_(packageName: string, patchMap: Record<string, string>) {
-  const packageManager = process.env.args!.at(0)! as keyof typeof PACKAGE_MANAGER_MAP
+  const packageManager = process.argv.at(0) as keyof typeof PACKAGE_MANAGER_MAP
 
   console.log(`🔄 Start patching "${packageName}"`)
   const patchOutput = run(`${PACKAGE_MANAGER_MAP[packageManager].patch} ${packageName}`)
