@@ -1122,8 +1122,6 @@ __metadata:
     tsdown: "npm:^0.21.10"
     typescript: "npm:^6.0.3"
     typescript-eslint: "npm:^8.59.1"
-  bin:
-    depatcher: ./dist/bin/depatcher.mjs
   languageName: unknown
   linkType: soft
 
