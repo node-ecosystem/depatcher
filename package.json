@@ -24,6 +24,7 @@
   },
   "scripts": {
     "build": "tsdown",
+    "test": "yarn node --test test/*.test.ts",
     "lint": "eslint src/**/*.ts",
     "od": "yarn outdated"
   },
