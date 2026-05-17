@@ -6,11 +6,13 @@ import { applyPatch } from 'diff'
 const PACKAGE_MANAGER_MAP = {
   yarn: {
     patch: 'yarn patch',
-    patchCommit: 'yarn patch-commit -s'
+    patchCommit: 'yarn patch-commit -s',
+    tempDir: (tempDir: string) => tempDir.split('\n')[1].slice(49)
   },
   pnpm: {
     patch: 'pnpm patch',
-    patchCommit: 'pnpm patch-commit'
+    patchCommit: 'pnpm patch-commit',
+    tempDir: (tempDir: string) => tempDir.split('\n')[2].trim()
   }
 }
 
@@ -30,7 +32,7 @@ export default async function applyPatch_(packageName: string, patchMap: Record<
   console.log(`🔄 Start patching "${packageName}"`)
   const patchOutput = run(`${PACKAGE_MANAGER_MAP[packageManager].patch} ${packageName}`)
 
-  const tempDir = patchOutput.split('\n')[1].slice(49)
+  const tempDir = PACKAGE_MANAGER_MAP[packageManager].tempDir(patchOutput)
 
   for (const [originalFile, patchPath] of Object.entries(patchMap)) {
     const fileToPatch = join(tempDir, originalFile)
