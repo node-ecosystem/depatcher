@@ -48,14 +48,14 @@ export default async function applyPatch_(packageName: string, patchMap: Record<
       readFileSync(patchPath, 'utf8').toString()
     )
     if (!patchedFile) {
-      throw new Error('❌ Patch failed. No changes were made')
+      throw new Error(`❌ Patch failed: ${fileToPatch} with ${patchPath}`)
     }
     writeFileSync(fileToPatch, patchedFile, 'utf8')
 
-    console.log(`💾 Patched ${fileToPatch} with ${patchPath}`)
+    console.log(`💾 Patched: ${fileToPatch} with ${patchPath}`)
   }
 
   run(`${pacakgeManagerPatcher.patchCommit} "${tempDir}"`)
 
-  console.log(`📦 "${packageName}" patched`)
+  console.log(`📦 Patched: "${packageName}"`)
 }
