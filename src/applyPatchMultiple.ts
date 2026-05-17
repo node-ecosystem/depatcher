@@ -1,5 +1,5 @@
-import { getPackageManagerPatcher, run } from './utils.ts'
 import applyPatch_ from './applyPatchCore.ts'
+import { getPackageManagerPatcher, run } from './utils.ts'
 
 export default async function applyPatchMultiple(packagePatchMap: { [packageName: string]: Record<string, string> }) {
   const pacakgeManagerPatcher = getPackageManagerPatcher()
