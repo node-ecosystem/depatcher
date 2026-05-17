@@ -16,18 +16,27 @@ export default async function applyPatch_(pacakgeManagerPatcher: ReturnType<type
     throw new Error(`❌ Failed to get temp directory: ${patchOutput}`)
   }
 
-  for (const [originalFile, patchPath] of Object.entries(patchMap)) {
+  for (const originalFile in patchMap) {
     const fileToPatch = join(tempDir, originalFile)
+    if (!existsSync(fileToPatch)) {
+      throw new Error(`❌ Original file not found: ${fileToPatch}`)
+    }
+
+    const patchPath = patchMap[originalFile]
+    if (!existsSync(patchPath)) {
+      throw new Error(`❌ Patch file not found: ${patchPath}`)
+    }
+
     const patchedFile = applyPatch(
       readFileSync(fileToPatch, 'utf8').toString(),
       readFileSync(patchPath, 'utf8').toString()
     )
-    if (!patchedFile) {
-      throw new Error(`❌ Patch failed: ${fileToPatch} with ${patchPath}`)
+    if (patchedFile) {
+      writeFileSync(fileToPatch, patchedFile, 'utf8')
+      console.log(`💾 Patched: ${fileToPatch} with ${patchPath}`)
+    } else {
+      console.info(`ℹ️  Already patched: ${fileToPatch} with ${patchPath}`)
     }
-    writeFileSync(fileToPatch, patchedFile, 'utf8')
-
-    console.log(`💾 Patched: ${fileToPatch} with ${patchPath}`)
   }
 
   run(`${pacakgeManagerPatcher.patchCommit} "${tempDir}"`)
