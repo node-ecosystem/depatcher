@@ -7,13 +7,13 @@ const PACKAGE_MANAGER_MAP = {
   yarn: {
     patch: 'yarn patch',
     patchCommit: 'yarn patch-commit -s',
-    tempDir: (tempDir: string) => tempDir.split('\n')[1].slice(49)
+    getTempDir: (tempDir: string) => tempDir.split('\n')[1].slice(49)
   },
   pnpm: {
     prePatch: `node -e "fs.rmSync('node_modules/.pnpm_patches',{recursive:true,force:true})"`,
     patch: 'pnpm patch',
     patchCommit: 'pnpm patch-commit',
-    tempDir: (tempDir: string) => tempDir.split('\n')[2].trim()
+    getTempDir: (tempDir: string) => tempDir.split('\n')[2].trim()
   }
 }
 
@@ -39,7 +39,7 @@ export default async function applyPatch_(packageName: string, patchMap: Record<
 
   const patchOutput = run(`${pacakgeManagerPatcher.patch} ${packageName}`)
 
-  const tempDir = pacakgeManagerPatcher.tempDir(patchOutput)
+  const tempDir = pacakgeManagerPatcher.getTempDir(patchOutput)
 
   for (const [originalFile, patchPath] of Object.entries(patchMap)) {
     const fileToPatch = join(tempDir, originalFile)
