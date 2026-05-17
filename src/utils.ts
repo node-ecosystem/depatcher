@@ -1,4 +1,4 @@
-import { execSync } from 'node:child_process'
+import child_process from 'node:child_process'
 
 const PACKAGE_MANAGER_MAP = {
   yarn: {
@@ -22,7 +22,7 @@ export const detectPackageManager = () => {
 
 export const run = (command: string): string => {
   console.log(`> ${command}`)
-  return execSync(command, { encoding: 'utf8', stdio: 'pipe' })
+  return child_process.execSync(command, { encoding: 'utf8', stdio: 'pipe' })
 }
 
 export const getPackageManagerPatcher = () => {

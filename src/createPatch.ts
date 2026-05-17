@@ -1,10 +1,10 @@
-import { readFileSync, writeFileSync } from 'node:fs'
+import fs from 'node:fs'
 import { createPatch } from 'diff'
 
 export default function createPatch_(originalFilePath: string, patchedFilePath: string, outputPatchPath: string) {
   // 1. Read the content of the two files as text strings
-  const originalText = readFileSync(originalFilePath, 'utf8')
-  const patchedText = readFileSync(patchedFilePath, 'utf8')
+  const originalText = fs.readFileSync(originalFilePath, 'utf8')
+  const patchedText = fs.readFileSync(patchedFilePath, 'utf8')
 
   // 2. Generate the diff
   let patchString = createPatch(
@@ -20,7 +20,7 @@ export default function createPatch_(originalFilePath: string, patchedFilePath: 
   patchString = patchString.slice(patchString.indexOf('@@'))
 
   // 4. Save the resulting string to the .patch file
-  writeFileSync(outputPatchPath, patchString, 'utf8')
+  fs.writeFileSync(outputPatchPath, patchString, 'utf8')
 
   console.log(`💾 Patched ${outputPatchPath}`)
 }
