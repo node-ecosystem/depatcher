@@ -1,11 +1,11 @@
 # depatcher
 
-Dependencies patcher ~ programmatically apply `.patch` files to your dependencies.
-Under the hood, it uses [diff](https://www.npmjs.com/package/diff).
+Programmatically create and apply `.patch` files to your project's dependencies.  
+Under the hood, it leverages [`diff`](https://www.npmjs.com/package/diff) to generate diffs and package manager primitives to apply them.
 
 ## ⚙️ Installation
 
-Install as development dependency:
+Install as a development dependency:
 
 | Package Manager | Command
 | - | -
@@ -15,23 +15,9 @@ Install as development dependency:
 
 ## 📖 Usage
 
-### `applyPatch`
-
-Apply `.patch` files to specific files within a target dependency.
-
-```ts
-import { applyPatch } from 'depatcher'
-
-// applyPatch(packageName, patchMap)
-await applyPatch('packageName', {
-  // 'target_file_in_dependency': 'path_to_patch_file'
-  '/dist/index.js': './packageName_index.patch'
-})
-```
-
 ### `createPatch`
 
-Create a `.patch` file using the diff of an original file and a patched file.
+Generates a `.patch` file by comparing an original file with a modified (patched) file.
 
 ```ts
 import { createPatch } from 'depatcher'
@@ -43,9 +29,41 @@ createPatch(
 )
 ```
 
+### `applyPatch`
+
+Applies `.patch` files to specific file paths within a target dependency.  
+
+```ts
+import { applyPatch } from 'depatcher'
+
+// applyPatch(packageName, patchMap)
+await applyPatch('packageName', {
+  // 'target_file_in_dependency': 'path_to_patch_file'
+  '/dist/index.js': './packageName_index.patch'
+})
+```
+
+### `applyPatchMultiple`
+
+Applies `.patch` files to multiple target dependencies efficiently.
+
+```ts
+import { applyPatchMultiple } from 'depatcher'
+
+// applyPatchMultiple(packagePatchMap)
+await applyPatchMultiple({
+  packageName1: {
+    '/dist/index.js': './packageName1_index.patch'
+  },
+  packageName2: {
+    '/dist/index.js': './packageName2_index.patch'
+  }
+})
+```
+
 ## 🔄 TODO
 
-- `npm` patch support
+- [ ] `npm` patch support
 
 ## 📜 License
 
