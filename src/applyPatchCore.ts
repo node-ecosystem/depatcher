@@ -1,4 +1,4 @@
-import { readFileSync, writeFileSync } from 'node:fs'
+import { existsSync, readFileSync, writeFileSync } from 'node:fs'
 import { join } from 'node:path'
 import { applyPatch } from 'diff'
 
@@ -10,6 +10,11 @@ export default async function applyPatch_(pacakgeManagerPatcher: ReturnType<type
   const patchOutput = run(`${pacakgeManagerPatcher.patch} ${packageName}`)
 
   const tempDir = pacakgeManagerPatcher.getTempDir(patchOutput)
+
+  if (!existsSync(tempDir)) {
+    console.error(patchOutput)
+    throw new Error(`❌ Failed to get temp directory: ${patchOutput}`)
+  }
 
   for (const [originalFile, patchPath] of Object.entries(patchMap)) {
     const fileToPatch = join(tempDir, originalFile)
