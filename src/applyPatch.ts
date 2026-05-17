@@ -2,15 +2,15 @@ import applyPatch_ from './applyPatchCore.ts'
 import { getPackageManagerPatcher, run } from './utils.ts'
 
 export default async function applyPatch(packageName: string, patchMap: Record<string, string>) {
-  const pacakgeManagerPatcher = getPackageManagerPatcher()
+  const packageManagerPatcher = getPackageManagerPatcher()
 
-  if ('prePatch' in pacakgeManagerPatcher) {
-    run(pacakgeManagerPatcher.prePatch)
+  if ('prePatch' in packageManagerPatcher) {
+    run(packageManagerPatcher.prePatch)
   }
 
-  await applyPatch_(pacakgeManagerPatcher, packageName, patchMap)
+  await applyPatch_(packageManagerPatcher, packageName, patchMap)
 
-  if ('postPatch' in pacakgeManagerPatcher) {
-    run(pacakgeManagerPatcher.postPatch)
+  if ('postPatch' in packageManagerPatcher) {
+    run(packageManagerPatcher.postPatch)
   }
 }

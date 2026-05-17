@@ -4,12 +4,12 @@ import { applyPatch } from 'diff'
 
 import { type getPackageManagerPatcher, run } from './utils.ts'
 
-export default async function applyPatch_(pacakgeManagerPatcher: ReturnType<typeof getPackageManagerPatcher>, packageName: string, patchMap: Record<string, string>) {
+export default async function applyPatch_(packageManagerPatcher: ReturnType<typeof getPackageManagerPatcher>, packageName: string, patchMap: Record<string, string>) {
   console.log(`🔄 Start patching "${packageName}"`)
 
-  const patchOutput = run(`${pacakgeManagerPatcher.patch} ${packageName}`)
+  const patchOutput = run(`${packageManagerPatcher.patch} ${packageName}`)
 
-  const tempDir = pacakgeManagerPatcher.getTempDir(patchOutput)
+  const tempDir = packageManagerPatcher.getTempDir(patchOutput)
 
   if (!existsSync(tempDir)) {
     console.error(patchOutput)
@@ -28,8 +28,8 @@ export default async function applyPatch_(pacakgeManagerPatcher: ReturnType<type
     }
 
     const patchedFile = applyPatch(
-      readFileSync(fileToPatch, 'utf8').toString(),
-      readFileSync(patchPath, 'utf8').toString()
+      readFileSync(fileToPatch, 'utf8'),
+      readFileSync(patchPath, 'utf8')
     )
     if (patchedFile) {
       writeFileSync(fileToPatch, patchedFile, 'utf8')
@@ -39,7 +39,7 @@ export default async function applyPatch_(pacakgeManagerPatcher: ReturnType<type
     }
   }
 
-  run(`${pacakgeManagerPatcher.patchCommit} "${tempDir}"`)
+  run(`${packageManagerPatcher.patchCommit} "${tempDir}"`)
 
   console.log(`📦 Patched: "${packageName}"`)
 }

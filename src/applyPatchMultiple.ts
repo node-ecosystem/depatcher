@@ -2,20 +2,19 @@ import applyPatch_ from './applyPatchCore.ts'
 import { getPackageManagerPatcher, run } from './utils.ts'
 
 export default async function applyPatchMultiple(packagePatchMap: { [packageName: string]: Record<string, string> }) {
-  const pacakgeManagerPatcher = getPackageManagerPatcher()
+  const packageManagerPatcher = getPackageManagerPatcher()
 
-  if ('prePatch' in pacakgeManagerPatcher) {
-    run(pacakgeManagerPatcher.prePatch)
+  if ('prePatch' in packageManagerPatcher) {
+    run(packageManagerPatcher.prePatch)
   }
 
-  const applyPatches = []
-  for (const packageName in packagePatchMap) {
-    applyPatches.push(applyPatch_(pacakgeManagerPatcher, packageName, packagePatchMap[packageName]))
-  }
+  const applyPatches = Object.keys(packagePatchMap).map((packageName) =>
+    applyPatch_(packageManagerPatcher, packageName, packagePatchMap[packageName])
+  )
 
   await Promise.all(applyPatches)
 
-  if ('postPatch' in pacakgeManagerPatcher) {
-    run(pacakgeManagerPatcher.postPatch)
+  if ('postPatch' in packageManagerPatcher) {
+    run(packageManagerPatcher.postPatch)
   }
 }
