@@ -8,9 +8,12 @@ export default async function applyPatchMultiple(packagePatchMap: { [packageName
     run(pacakgeManagerPatcher.prePatch)
   }
 
+  const applyPatches = []
   for (const packageName in packagePatchMap) {
-    await applyPatch_(pacakgeManagerPatcher, packageName, packagePatchMap[packageName])
+    applyPatches.push(applyPatch_(pacakgeManagerPatcher, packageName, packagePatchMap[packageName]))
   }
+
+  await Promise.all(applyPatches)
 
   if ('postPatch' in pacakgeManagerPatcher) {
     run(pacakgeManagerPatcher.postPatch)
