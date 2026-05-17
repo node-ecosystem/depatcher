@@ -47,15 +47,6 @@ createPatch(
 
 - `npm` patch support
 
-## 🛠️ Contributing
-
-Got ideas or want to add a patch string?
-
-1. Clone the repository.
-2. Install dependencies with `yarn install`.
-3. Build the project using `yarn build` (uses `tsdown`).
-4. Run tests with `yarn test`.
-
 ## 📜 License
 
 This project is licensed under the [MIT License](LICENSE).
