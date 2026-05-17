@@ -28,3 +28,17 @@ export const run = (command: string): string => {
 export const getPackageManagerPatcher = () => {
   return PACKAGE_MANAGER_MAP[detectPackageManager() as keyof typeof PACKAGE_MANAGER_MAP]
 }
+
+export const withPatchLifecycle = async (action: (packageManagerPatcher: ReturnType<typeof getPackageManagerPatcher>) => Promise<void>) => {
+  const packageManagerPatcher = getPackageManagerPatcher()
+
+  if ('prePatch' in packageManagerPatcher) {
+    run(packageManagerPatcher.prePatch)
+  }
+
+  await action(packageManagerPatcher)
+
+  if ('postPatch' in packageManagerPatcher) {
+    run(packageManagerPatcher.postPatch)
+  }
+}
