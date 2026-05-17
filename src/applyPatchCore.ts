@@ -4,7 +4,7 @@ import { applyPatch } from 'diff'
 
 import { type getPackageManagerPatcher, run } from './utils.ts'
 
-export default async function applyPatch_(packageManagerPatcher: ReturnType<typeof getPackageManagerPatcher>, packageName: string, patchMap: Record<string, string>) {
+export default async function applyPatchCore(packageManagerPatcher: ReturnType<typeof getPackageManagerPatcher>, packageName: string, patchMap: Record<string, string>) {
   console.log(`🔄 Start patching "${packageName}"`)
 
   const patchOutput = run(`${packageManagerPatcher.patch} ${packageName}`)
