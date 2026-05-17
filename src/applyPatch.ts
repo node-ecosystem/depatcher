@@ -29,16 +29,17 @@ function run(command: string): string {
 
 export default async function applyPatch_(packageName: string, patchMap: Record<string, string>) {
   const packageManager = detectPackageManager() as keyof typeof PACKAGE_MANAGER_MAP
+  const pacakgeManagerPatcher = PACKAGE_MANAGER_MAP[packageManager]
 
   console.log(`🔄 Start patching "${packageName}"`)
 
-  if ('prePatch' in PACKAGE_MANAGER_MAP[packageManager]) {
-    run(PACKAGE_MANAGER_MAP[packageManager as 'pnpm'].prePatch)
+  if ('prePatch' in pacakgeManagerPatcher) {
+    run(pacakgeManagerPatcher.prePatch)
   }
 
-  const patchOutput = run(`${PACKAGE_MANAGER_MAP[packageManager].patch} ${packageName}`)
+  const patchOutput = run(`${pacakgeManagerPatcher.patch} ${packageName}`)
 
-  const tempDir = PACKAGE_MANAGER_MAP[packageManager].tempDir(patchOutput)
+  const tempDir = pacakgeManagerPatcher.tempDir(patchOutput)
 
   for (const [originalFile, patchPath] of Object.entries(patchMap)) {
     const fileToPatch = join(tempDir, originalFile)
@@ -54,7 +55,7 @@ export default async function applyPatch_(packageName: string, patchMap: Record<
     console.log(`💾 Patched ${fileToPatch} with ${patchPath}`)
   }
 
-  run(`${PACKAGE_MANAGER_MAP[packageManager].patchCommit} "${tempDir}"`)
+  run(`${pacakgeManagerPatcher.patchCommit} "${tempDir}"`)
 
   console.log(`📦 "${packageName}" patched`)
 }
