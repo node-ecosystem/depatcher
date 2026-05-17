@@ -10,6 +10,7 @@ const PACKAGE_MANAGER_MAP = {
     tempDir: (tempDir: string) => tempDir.split('\n')[1].slice(49)
   },
   pnpm: {
+    prePatch: `node -e "fs.rmSync('node_modules/.pnpm_patches',{recursive:true,force:true})"`,
     patch: 'pnpm patch',
     patchCommit: 'pnpm patch-commit',
     tempDir: (tempDir: string) => tempDir.split('\n')[2].trim()
@@ -30,6 +31,11 @@ export default async function applyPatch_(packageName: string, patchMap: Record<
   const packageManager = detectPackageManager() as keyof typeof PACKAGE_MANAGER_MAP
 
   console.log(`🔄 Start patching "${packageName}"`)
+
+  if ('prePatch' in PACKAGE_MANAGER_MAP[packageManager]) {
+    run(PACKAGE_MANAGER_MAP[packageManager as 'pnpm'].prePatch)
+  }
+
   const patchOutput = run(`${PACKAGE_MANAGER_MAP[packageManager].patch} ${packageName}`)
 
   const tempDir = PACKAGE_MANAGER_MAP[packageManager].tempDir(patchOutput)
