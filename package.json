@@ -34,7 +34,7 @@
   "devDependencies": {
     "@types/node": "^25.8.0",
     "@yarnpkg/sdks": "^3.2.3",
-    "eslint": "^10.3.0",
+    "eslint": "^10.4.0",
     "eslint-plugin-unicorn": "^64.0.0",
     "tsdown": "^0.22.0",
     "typescript": "^6.0.3",
